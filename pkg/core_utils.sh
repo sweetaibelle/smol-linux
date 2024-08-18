@@ -40,6 +40,40 @@ function build_busybox(){
   #fi
 }
 
+function download_util_linux(){
+  download "https://github.com/util-linux/util-linux/archive/refs/tags/v${UTIL_LINUX_VERSION}.tar.gz" "util-linux.tar.gz"
+}
+
+function extract_util_linux(){
+  extract "util-linux.tar.gz"
+}
+
+# Requires automake autoconf autopoint libtool sqlite3 etc...
+# Disabling liblastlog2 because I was having issues with the requirements.
+function build_util_linux(){
+  cd ${WORKING_DIR}/util-linux-${UTIL_LINUX_VERSION}
+  ./autogen.sh
+  ./configure --libdir=/usr/lib --runstatedir=/run --disable-liblastlog2 --without-python ADJTIME_PATH=/var/lib/hwclock/adjtime
+  make
+  fakeroot make DESTDIR=${ROOTFS_DIR} install-strip
+}
+
+function download_coreutils(){
+  download "https://ftp.gnu.org/gnu/coreutils/coreutils-${COREUTILS_VERSION}.tar.gz" "coreutils.tar.gz"
+}
+
+function extract_coreutils(){
+  extract "coreutils.tar.gz"
+}
+
+function build_coreutils(){
+  cd ${WORKING_DIR}/coreutils-${COREUTILS_VERSION}
+  echo ${pwd}
+  ./configure
+  make_cmd
+  make DESTDIR=${ROOTFS_DIR} install
+}
+
 function build_utils(){
   case $1 in
     "busybox")

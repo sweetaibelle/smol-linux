@@ -25,21 +25,21 @@ function extract(){
 function make_rootfs(){
   cd ${ROOTFS_DIR}
   #mkdir -p dev proc sys
-  mkdir -p ${ROOTFS_DIR}/{dev,etc/rc,home,mnt,proc,root,sys,tmp/run,usr/{bin,sbin,lib},var}
+  mkdir -p ${ROOTFS_DIR}/{dev,etc/rc,home,mnt,proc,root,sys,tmp/run,usr/{bin,sbin,lib},var/lib/hwclock}
   chmod a+rwxt ${ROOTFS_DIR}/tmp
-  ##if [ -e ${INIT_SCRIPT} ]
-  #then
-  #  cp ${INIT_SCRIPT} .
-  #else
-  #  echo '#!/bin/sh' > init
-  #  echo 'dmesg -n 1' >> init
-  #  echo 'mount -t devtmpfs none /dev' >> init
-  #  echo 'mount -t proc none /proc' >> init
-  #  echo 'mount -t sysfs none /sys' >> init
-  #  echo 'setsid cttyhack /bin/sTOYBOX_CFGh' >> init
-  #fi
+  if [ -e ${INIT_SCRIPT} ]
+  then
+    cp ${INIT_SCRIPT} .
+  else
+    echo '#!/bin/sh' > init
+    echo 'dmesg -n 1' >> init
+    echo 'mount -t devtmpfs none /dev' >> init
+    echo 'mount -t proc none /proc' >> init
+    echo 'mount -t sysfs none /sys' >> init
+    echo 'setsid cttyhack /bin/sTOYBOX_CFGh' >> init
+  fi
 
-  #chmod +x init
+  chmod +x init
 }
 
 function compress_rootfs(){

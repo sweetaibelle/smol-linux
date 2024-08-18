@@ -25,7 +25,15 @@ mkdir -p ${ISO_DIR}
 
 # We also need some sort of init system, and that bit still needs to be properly sorted out.
 
-build_utils "busybox"
+#build_utils "busybox"
+download_coreutils
+extract_coreutils
+build_coreutils
+
+download_util_linux
+extract_util_linux
+build_util_linux
+
 make_rootfs
 make_kernel
 make_bash
